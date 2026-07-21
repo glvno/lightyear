@@ -14,8 +14,13 @@ server = ["bevy_platform"]
 metrics = ["dep:metrics"]
 
 [dependencies]
-lightyear_core.workspace = true
-lightyear_link.workspace = true
+# rb pin (glvno/rocket_balls#627): registry deps, NOT the workspace path-deps — consumed via
+# [patch.crates-io] from outside this workspace, path-deps would drag a SECOND copy of
+# lightyear_link/core into the consumer's build whose component types (Linked, Link, ...) are
+# disjoint from the crates.io ones the rest of lightyear uses, silently breaking the transport
+# (the send system's With<Linked> never matches).
+lightyear_core = { version = "0.28.0", default-features = false }
+lightyear_link = { version = "0.28.0", default-features = false }
 
 aeronet_io.workspace = true
 
